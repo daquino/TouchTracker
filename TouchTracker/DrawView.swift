@@ -3,6 +3,9 @@ import UIKit
 class DrawView: UIView {
     var currentLines = [NSValue:Line]()
     var finishedLines = [Line]()
+    var currentCircle: Circle?
+    var finishedCircles = [Circle]()
+    var currentCircleBounds = [NSValue:CGPoint]()
     @IBInspectable var finishedLineColor: UIColor = UIColor.blackColor() {
         didSet {
             setNeedsDisplay()
@@ -27,18 +30,33 @@ class DrawView: UIView {
         path.moveToPoint(line.begin)
         path.addLineToPoint(line.end)
         path.stroke()
-        
     }
+    
+    func strokeCircle(circle: Circle) {
+        print("Drawing circle")
+        let path = UIBezierPath()
+        path.lineWidth = lineThickness
+        path.lineCapStyle = CGLineCap.Round
+        path.addArcWithCenter(circle.center, radius: circle.radius, startAngle: 0, endAngle: CGFloat(2*M_PI), clockwise: true)
+        path.stroke()
+    }
+    
     
     override func drawRect(rect: CGRect) {
         finishedLineColor.setStroke()
-        for line in finishedLines {
-            strokeLine(line)
+        //        for line in finishedLines {
+        //            strokeLine(line)
+        //        }
+        for circle in finishedCircles {
+            strokeCircle(circle)
         }
         
-        for (_, line) in currentLines {
-            applyCurrentLineStrokeColor(line)
-            strokeLine(line)
+        currentLineColor.setStroke()
+        //        for (_, line) in currentLines {
+        //            strokeLine(line)
+        //        }
+        if let circle = currentCircle {
+            strokeCircle(circle)
         }
     }
     
@@ -51,7 +69,19 @@ class DrawView: UIView {
             let key = NSValue(nonretainedObject: touch)
             currentLines[key] = newLine
         }
-            setNeedsDisplay()
+        
+        for touch in touches {
+            let key = NSValue(nonretainedObject: touch)
+            if currentCircleBounds.count < 2 {
+                let location = touch.locationInView(self)
+                currentCircleBounds[key] = location
+            }
+            if currentCircleBounds.count == 2 {
+                currentCircle = Circle(center: getCenter(), radius: getRadius())
+            }
+        }
+        
+        setNeedsDisplay()
     }
     
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -59,6 +89,16 @@ class DrawView: UIView {
         for touch in touches {
             let key = NSValue(nonretainedObject: touch)
             currentLines[key]?.end = touch.locationInView(self)
+        }
+        
+        for touch in touches {
+            let key = NSValue(nonretainedObject: touch)
+            if currentCircleBounds.count == 2 {
+                let location = touch.locationInView(self)
+                currentCircleBounds[key] = location
+                currentCircle?.center = getCenter()
+                currentCircle?.radius = getRadius()
+            }
         }
         setNeedsDisplay()
     }
@@ -73,6 +113,21 @@ class DrawView: UIView {
                 currentLines.removeValueForKey(key)
             }
         }
+        
+        for touch in touches {
+            let key = NSValue(nonretainedObject: touch)
+            if currentCircleBounds.count == 2 {
+                let location = touch.locationInView(self)
+                if let circle = currentCircle {
+                    currentCircleBounds[key] = location
+                    currentCircle?.center = getCenter()
+                    currentCircle?.radius = getRadius()
+                    finishedCircles.append(circle)
+                }
+            }
+        }
+        currentCircle = nil
+        currentCircleBounds.removeAll()
         setNeedsDisplay()
     }
     
@@ -80,6 +135,20 @@ class DrawView: UIView {
         print(#function)
         currentLines.removeAll()
         setNeedsDisplay()
+    }
+    
+    func getCenter() -> CGPoint {
+        let circleBounds = Array(currentCircleBounds.values)
+        let bound1 = circleBounds[0]
+        let bound2 = circleBounds[1]
+        return CGPoint(x: (bound2.x+bound1.x)/2, y: (bound2.y+bound1.y)/2)
+    }
+    
+    func getRadius() -> CGFloat {
+        let circleBounds = Array(currentCircleBounds.values)
+        let bound1 = circleBounds[0]
+        let bound2 = circleBounds[1]
+        return sqrt(pow(bound2.x-bound1.x, 2) + pow(bound2.y-bound1.y, 2)) / 2
     }
     
     func applyCurrentLineStrokeColor(line: Line) {

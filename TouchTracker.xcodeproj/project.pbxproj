@@ -14,6 +14,7 @@
 		505D16181CC18CDC006ADEEA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 505D16161CC18CDC006ADEEA /* LaunchScreen.storyboard */; };
 		505D16201CC18D8D006ADEEA /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D161F1CC18D8D006ADEEA /* Line.swift */; };
 		505D16221CC18E69006ADEEA /* DrawView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D16211CC18E69006ADEEA /* DrawView.swift */; };
+		505D16261CC1AB90006ADEEA /* Circle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D16251CC1AB90006ADEEA /* Circle.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		505D16191CC18CDC006ADEEA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		505D161F1CC18D8D006ADEEA /* Line.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
 		505D16211CC18E69006ADEEA /* DrawView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawView.swift; sourceTree = "<group>"; };
+		505D16251CC1AB90006ADEEA /* Circle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Circle.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +68,7 @@
 				505D16191CC18CDC006ADEEA /* Info.plist */,
 				505D161F1CC18D8D006ADEEA /* Line.swift */,
 				505D16211CC18E69006ADEEA /* DrawView.swift */,
+				505D16251CC1AB90006ADEEA /* Circle.swift */,
 			);
 			path = TouchTracker;
 			sourceTree = "<group>";
@@ -141,6 +144,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				505D16261CC1AB90006ADEEA /* Circle.swift in Sources */,
 				505D16201CC18D8D006ADEEA /* Line.swift in Sources */,
 				505D16101CC18CDC006ADEEA /* ViewController.swift in Sources */,
 				505D16221CC18E69006ADEEA /* DrawView.swift in Sources */,
@@ -294,6 +298,7 @@
 				505D161E1CC18CDC006ADEEA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
