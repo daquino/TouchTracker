@@ -36,8 +36,8 @@ class DrawView: UIView {
             strokeLine(line)
         }
         
-        currentLineColor.setStroke()
         for (_, line) in currentLines {
+            applyCurrentLineStrokeColor(line)
             strokeLine(line)
         }
     }
@@ -80,5 +80,26 @@ class DrawView: UIView {
         print(#function)
         currentLines.removeAll()
         setNeedsDisplay()
+    }
+    
+    func applyCurrentLineStrokeColor(line: Line) {
+        let angle = getLineAngle(line)
+        if angle > 0 && angle <= 90 {
+            UIColor.darkGrayColor().setStroke()
+        }
+        else if angle > 90 && angle <= 180 {
+            UIColor.cyanColor().setStroke()
+        }
+        else if angle > 180 && angle <= 270 {
+            UIColor.brownColor().setStroke()
+        }
+        else {
+            UIColor.greenColor().setStroke()
+        }
+        print("Angle of line = \(angle)")
+    }
+    
+    func getLineAngle(line: Line) -> Double {
+        return Double(atan2(line.end.y - line.begin.y, line.end.x - line.end.y)) * 180 / M_PI
     }
 }
