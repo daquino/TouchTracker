@@ -70,6 +70,11 @@ class DrawView: UIView, UIGestureRecognizerDelegate {
         moveRecognizer.cancelsTouchesInView = false
         addGestureRecognizer(moveRecognizer)
         
+        let swipeRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(DrawView.swipe(_:)))
+        swipeRecognizer.direction = .Up
+        swipeRecognizer.numberOfTouchesRequired = 3
+        addGestureRecognizer(swipeRecognizer)
+        
         
     }
     
@@ -224,5 +229,25 @@ class DrawView: UIView, UIGestureRecognizerDelegate {
     
     func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
+    }
+    
+    func swipe(gestureRecognizer: UISwipeGestureRecognizer) {
+        print("Recognized a swipe")
+        let point = gestureRecognizer.locationInView(self)
+        let menu = UIMenuController.sharedMenuController()
+        becomeFirstResponder()
+        let redItem = UIMenuItem(title: "Red", action: #selector(DrawView.turnRed(_:)))
+        let blueItem = UIMenuItem(title: "Blue", action: #selector(DrawView.turnBlue(_:)))
+        menu.menuItems = [redItem, blueItem]
+        menu.setTargetRect(CGRect(x: point.x, y: point.y, width: 2, height: 2), inView: self)
+        menu.setMenuVisible(true, animated: true)
+    }
+    
+    func turnRed(sender: AnyObject) {
+        finishedLineColor = UIColor.redColor()
+    }
+    
+    func turnBlue(sender: AnyObject) {
+        finishedLineColor = UIColor.blueColor()
     }
 }
