@@ -12,6 +12,7 @@ class DrawView: UIView, UIGestureRecognizerDelegate {
         }
     }
     var moveRecognizer: UIPanGestureRecognizer!
+    var longPressRecognizer: UILongPressGestureRecognizer!
     @IBInspectable var finishedLineColor: UIColor = UIColor.blackColor() {
         didSet {
             setNeedsDisplay()
@@ -51,7 +52,7 @@ class DrawView: UIView, UIGestureRecognizerDelegate {
         tapRecognizer.requireGestureRecognizerToFail(doubleTapRecognizer)
         addGestureRecognizer(tapRecognizer)
         
-        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(DrawView.longPress(_:)))
+        longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(DrawView.longPress(_:)))
         addGestureRecognizer(longPressRecognizer)
         
         moveRecognizer = UIPanGestureRecognizer(target: self, action: #selector(DrawView.moveLine(_:)))
@@ -196,7 +197,7 @@ class DrawView: UIView, UIGestureRecognizerDelegate {
         print("Recognized a pan")
         
         if let index = selectedLineIndex {
-            if gestureRecognizer.state == .Changed {
+            if gestureRecognizer.state == .Changed && !UIMenuController.sharedMenuController().menuVisible {
                 let translation = gestureRecognizer.translationInView(self)
                 finishedLines[index].begin.x += translation.x
                 finishedLines[index].begin.y += translation.y
