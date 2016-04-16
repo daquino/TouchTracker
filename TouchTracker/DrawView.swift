@@ -36,7 +36,17 @@ class DrawView: UIView, UIGestureRecognizerDelegate {
         path.moveToPoint(line.begin)
         path.addLineToPoint(line.end)
         path.stroke()
+    }
+    
+    func strokeCurrentLine(line: Line) {
+        let path = UIBezierPath()
+        let velocity = moveRecognizer.velocityInView(self)
         
+        path.lineWidth = hypot(velocity.x, velocity.y)/100
+        path.lineCapStyle = CGLineCap.Round
+        path.moveToPoint(line.begin)
+        path.addLineToPoint(line.end)
+        path.stroke()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -72,7 +82,7 @@ class DrawView: UIView, UIGestureRecognizerDelegate {
         
         currentLineColor.setStroke()
         for (_, line) in currentLines {
-            strokeLine(line)
+            strokeCurrentLine(line)
         }
         
         if let index = selectedLineIndex {
